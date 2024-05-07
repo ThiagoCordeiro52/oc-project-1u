@@ -1,4 +1,4 @@
-#include "systemc.h"
+#include <systemc.h>
 
 SC_MODULE(BIT_ADDER) {
     sc_in<sc_logic> a, b, cin;
@@ -10,14 +10,11 @@ SC_MODULE(BIT_ADDER) {
     }
 
     void process() {
-        sc_logic aANDb, aXORb, cinANDaXORb;
-
-        aANDb = a.read() & b.read();
-        aXORb = a.read() ^ b.read();
-        cinANDaXORb = cin.read() & aXORb;
+        sc_logic aXORb = a.read() ^ b.read();         
+        sc_logic aANDb = a.read() & b.read();         
+        sc_logic cinANDaXORb = cin.read() & aXORb;    
 
         sum = aXORb ^ cin.read();
-        cout = aANDb | cinANDaXORb;
+        cout = aANDb | cinANDaXORb;   // carry out                 
     }
-
 };
