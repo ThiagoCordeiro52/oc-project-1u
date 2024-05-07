@@ -1,5 +1,5 @@
 #include <systemc.h>
-#include "design.cpp"
+#include "registers.cpp"
 
 int sc_main(int argc, char* argv[]) {
     Register reg("register");
