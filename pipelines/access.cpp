@@ -10,8 +10,6 @@ SC_MODULE(access) {
     sc_out<sc_uint<32>> ulaOutput, memoryOutput;
     sc_out<sc_uint<5>> muxOutput;
     sc_out<bool> writeOutput, memoryLoadOutput;
-
-    // methods
     void next();
 
     SC_CTOR(access)
