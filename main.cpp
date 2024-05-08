@@ -17,7 +17,8 @@ int sc_main(int argc, char* argv[]) {
     MUX mux("MUX");
 
     // signals
-    sc_clock clock("clock", 10, SC_NS);  // 10 ns period
+
+    sc_clock clock("clock", 10, SC_NS);
     sc_signal<bool> reset, enable, jump;
     sc_signal<sc_uint<32>> jumpAddress, pc_address;
     sc_signal<sc_uint<32>> operand1, operand2, alu_control, alu_result;
@@ -72,8 +73,6 @@ int sc_main(int argc, char* argv[]) {
     mux.result(mux_result);
     mux.zero(mux_zero);
 
-    // Start simulation
-    sc_start();
 
     return 0;
 }
