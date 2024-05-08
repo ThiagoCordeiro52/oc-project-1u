@@ -2,16 +2,16 @@
 #include "sysc/utils/sc_vector.h"
 
 SC_MODULE(decode) {
+    //input
+    sc_in_clk clock;
     sc_in<sc_uint<32>> input, dataInput, dataInput2;
     sc_in<sc_uint<32>> memoryAddress, ulaAddress, memoryRegAddress, memoryAdressInput;
     sc_in<bool> ulaInput, memoryWriteInput, jump, writeRegisterInput, memoryInput, jumpcInput, jumpNegIn;
-    sc_in_clk clock;
 
+    // output
     sc_out<sc_uint<32>> output, dataOutput, dataOutput2;
     sc_out<sc_uint<5>> memoryAddressOutput, ulaRegisterOutput, memoryLoadOutput, memoryWriteOutput;
     sc_out<bool> ulaOpOutput, memoryWriteOutput, jumpOutput, writeOutput, memoryLoadOutput, jumpcOutput, jumpNegOut;
-
-    // methods
     void next();
 
     SC_CTOR(decode)
@@ -21,8 +21,7 @@ SC_MODULE(decode) {
     }
 };
 
-void decode::next()
-{
+void decode::next() {
     output.write(input.read());
     dataOutput.write(dataInput.read());
     dataOutput2.write(dataInput2.read());
