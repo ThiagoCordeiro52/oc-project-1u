@@ -1,10 +1,14 @@
 #include <systemc.h>
-#include "common/pc/pc.cpp"
-#include "common/ula/ula.cpp"
-#include "common/registers/registers.cpp"
-#include "common/instruction-memory/instruction-memory.cpp"
-#include "common/data-memory/data-memory.cpp"
-#include "common/mux/mux.cpp"
+#include "common/pc/pc.h"
+#include "common/ula/ula.h"
+#include "common/registers/registers.h"
+#include "common/instruction-memory/instruction-memory.h"
+#include "common/data-memory/data-memory.h"
+#include "common/mux/mux.h"
+#include "pipelines/1-fetch.h"
+#include "pipelines/2-decode.h"
+#include "pipelines/3-execute.h"
+#include "pipelines/4-access.h"
 
 int sc_main(int argc, char* argv[]) {
     ProgramCounter pc("PC");
@@ -15,10 +19,13 @@ int sc_main(int argc, char* argv[]) {
     InstructionMemory imem("IMem");
     Memory mem("Mem");
     MUX mux("MUX");
-
-    // signals
+    Fetch fetch("fetch");
+    Decode decode("decode");
+    Execute execute("execute");
+    Access access("access");
 
     sc_clock clock("clock", 10, SC_NS);
+
     sc_signal<bool> reset, enable, jump;
     sc_signal<sc_uint<32>> jumpAddress, pc_address;
     sc_signal<sc_uint<32>> operand1, operand2, alu_control, alu_result;
@@ -33,7 +40,6 @@ int sc_main(int argc, char* argv[]) {
     sc_signal<sc_uint<32>> mux_operand1, mux_operand2, mux_operand3, mux_result;
     sc_signal<bool> mux_zero;
 
-    // Connect components to signals
     pc.clock(clock);
     pc.reset(reset);
     pc.enable(enable);
@@ -73,6 +79,33 @@ int sc_main(int argc, char* argv[]) {
     mux.result(mux_result);
     mux.zero(mux_zero);
 
+    // Pipeline 1
+    fetch.clock(clock);
+    fetch.pc_address(pc_address);
+    fetch.imem_instruction_out(imem_instruction_out);
+
+    // Pipeline 2
+    decode.clock(clock);
+    decode.imem_instruction_in(imem_instruction_out);
+    decode.regDB_data_out(regDB_data_out);
+
+    // Pipeline 3
+    execute.clock(clock);
+    execute.operand1(operand1);
+    execute.operand2(operand2);
+    execute.alu_control(alu_control);
+    execute.alu_result(alu_result);
+    execute.alu_zero(alu_zero);
+
+    // Pipeline 4
+    access.clock(clock);
+    access.mem_data(mem_data);
+    access.mem_clock(mem_clock);
+    access.mem_write_enable(mem_write_enable);
+    access.mem_read_enable(mem_read_enable);
+    access.mem_address(mem_address);
+
+    sc_start();  // Descobrir como simular isso aqui
 
     return 0;
 }
