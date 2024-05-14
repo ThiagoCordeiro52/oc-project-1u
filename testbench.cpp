@@ -1,3 +1,17 @@
+// For eda:
+// #include <systemc.h>
+// #include "pc.cpp"
+// #include "ula.cpp"
+// #include "registers.cpp"
+// #include "instructionMemory.cpp"
+// #include "dataMemory.cpp"
+// #include "mux.cpp"
+// #include "1-fetch.cpp"
+// #include "2-decode.cpp"
+// #include "3-execute.cpp"
+// #include "4-access.cpp"
+
+
 #include <systemc.h>
 #include "common/pc/pc.cpp"
 #include "common/ula/ula.cpp"
@@ -42,8 +56,8 @@ SC_MODULE(Testbench) {
 
     SC_CTOR(Testbench) : pc("PC"), alu("ALU"), reg1("Reg1"), reg2("Reg2"),
                          regDB("RegDB"), imem("IMem"), mem("Mem"),
-                         mux("MUX"), fetch("fetch"), decode("decode"),
-                         execute("execute"), access("access"), clock("clock", 10, SC_NS) {
+                         mux("MUX"), fetch("Fetch"), decode("Decode"),
+                         execute("Execute"), access("Access"), clock("clock", 10, SC_NS) {
 
         // Connect components to signals
         pc.clock(clock);
@@ -87,32 +101,38 @@ SC_MODULE(Testbench) {
 
         // Connect pipeline stages
         fetch.clock(clock);
-        fetch.pc_address(pc_address);
-        fetch.imem_instruction_out(imem_instruction_out);
+        fetch.input(pc_address);
+        fetch.output(imem_instruction_out);
 
         decode.clock(clock);
-        decode.imem_instruction_in(imem_instruction_out);
-        decode.regDB_data_out(regDB_data_out);
+        decode.instructionInput(imem_instruction_out);
+        decode.dataInput1(regDB_data_out);
+        decode.dataInput2(reg1_data_out);
 
         execute.clock(clock);
-        execute.operand1(operand1);
-        execute.operand2(operand2);
-        execute.alu_control(alu_control);
-        execute.alu_result(alu_result);
-        execute.alu_zero(alu_zero);
+        execute.instructionInput(imem_instruction_out);
+        execute.dataMuxInput(regDB_data_out);
+        execute.memoryAddressLoadInput(mux_result);
+        execute.muxAddressInput(pc_address);
+        execute.memoryWriteInput(reg1_data_out);
+        execute.jumpResultInput(alu_zero);
+        execute.controlMemoryInput(enable);
+        execute.jumpInput(jump);
+        execute.writeInput(regDB_data_out);
+        execute.loadMemoryInput(mem_read_enable);
+        execute.JumpCmpIn(alu_zero);
 
         access.clock(clock);
-        access.mem_data(mem_data);
-        access.mem_clock(mem_clock);
-        access.mem_write_enable(mem_write_enable);
-        access.mem_read_enable(mem_read_enable);
-        access.mem_address(mem_address);
+        access.ulaInput(alu_result);
+        access.dataInput(mem_data);
+        access.muxAddressInput(mux_result);
+        access.writeInput(mem_write_enable);
+        access.memoryLoadInput(mem_read_enable);
 
         SC_THREAD(test);
     }
 
     void test() {
-
         reset = 1;
         enable = 1;
         jump = 0;
@@ -122,7 +142,6 @@ SC_MODULE(Testbench) {
         reset = 0;
         pc_address = 0x100;
         wait(10, SC_NS);
-
     }
 };
 
