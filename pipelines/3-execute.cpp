@@ -21,8 +21,8 @@ SC_MODULE(execute) {
 
 void execute::next() {
 
-    InstructionOut.write(instructionInput.read());
-    DataMuxOut.write(dataMuxInput.read());
+    instructionOutput.write(instructionInput.read());
+    dataMuxOutput.write(dataMuxInput.read());
     memoryAddressLoadOutput.write(memoryAddressLoadInput.read());
     muxAddressRegOutput.write(muxAddressInput.read());
     memoryWriteAddressOutput.write(memoryWriteInput.read());
