@@ -8,7 +8,7 @@ SC_MODULE(decode) { // Ok
     sc_in<bool> ulaOperatorIn, controlMemoryInput, jumpInput, writeInput, loadMemoryInput, jumpCompareInput, jumpNegInput;
 
     sc_out<sc_uint<32>> instructionOutput, dataOutput1, dataOutput2;
-    sc_out<sc_uint<5>> memoryLoadAddressOutput, ulaAddressOutput, memoryLoadAddressOutput, memoryWriteAddressOutput;
+    sc_out<sc_uint<5>> memoryLoadAddressOutput, ulaAddressOutput, memoryLoadAddressRegOutput, memoryWriteAddressOutput;
     sc_out<bool> ulaOperatorOutput, controlMemoryWriteOutput, jumpOutput, regWriteOutput, memoryLoadOutput, jumpCompareOutput, jumpNegOutput;
 
     void next();
@@ -27,7 +27,7 @@ void decode::next() {
     dataOutput2.write(dataInput2.read());
     memoryLoadAddressOutput.write(memoryAddressLoadInput.read().range(25, 21));
     ulaAddressOutput.write(ulaAddressInput.read().range(15, 11));
-    memoryLoadAddressOutput.write(memoryLoadAddressIn.read().range(20, 16));
+    memoryLoadAddressRegOutput.write(memoryLoadAddressIn.read().range(20, 16));
     AddrMemWriteOut.write(memoryWriteAddressIn.read().range(20, 16));
 
     ulaOperatorOutput.write(ulaOperatorIn.read());
