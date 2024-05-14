@@ -1,7 +1,7 @@
 #include "systemc.h"
 #include "sysc/utils/sc_vector.h"
 
-SC_MODULE(access) {
+SC_MODULE(Access) {
     sc_in_clk clock;
     sc_in<sc_uint<32>> ulaInput, dataInput;
     sc_in<sc_uint<5>> muxAddressInput;
@@ -13,13 +13,13 @@ SC_MODULE(access) {
 
     void next();
 
-    SC_CTOR(access) {
+    SC_CTOR(Access) {
         SC_METHOD(next);
         sensitive << clock.pos();
     }
 };
 
-void access::next() {
+void Access::next() {
     ulaOutput.write(ulaInput.read());
     dataOutput.write(dataInput.read());
     muxAddressOutput.write(muxAddressInput.read());

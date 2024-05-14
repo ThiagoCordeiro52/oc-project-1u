@@ -1,7 +1,7 @@
 #include "systemc.h"
 #include "sysc/utils/sc_vector.h"
 
-SC_MODULE(execute) {
+SC_MODULE(Execute) {
     sc_in_clk clock;
     sc_in<sc_uint<32>> instructionInput, dataMuxInput;
     sc_in<sc_uint<5>> memoryAddressLoadInput, muxAddressInput, memoryWriteInput;
@@ -13,13 +13,13 @@ SC_MODULE(execute) {
 
     void next();
 
-    SC_CTOR(execute) {
+    SC_CTOR(Execute) {
         SC_METHOD(next);
         sensitive << clock.pos();
     }
 };
 
-void execute::next() {
+void Execute::next() {
 
     instructionOutput.write(instructionInput.read());
     dataMuxOutput.write(dataMuxInput.read());
