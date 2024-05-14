@@ -28,7 +28,7 @@ void decode::next() {
     memoryLoadAddressOutput.write(memoryAddressLoadInput.read().range(25, 21));
     ulaAddressOutput.write(ulaAddressInput.read().range(15, 11));
     memoryLoadAddressRegOutput.write(memoryLoadAddressIn.read().range(20, 16));
-    AddrMemWriteOut.write(memoryWriteAddressIn.read().range(20, 16));
+    memoryWriteAddressOutput.write(memoryWriteAddressIn.read().range(20, 16));
 
     ulaOperatorOutput.write(ulaOperatorIn.read());
     controlMemoryWriteOutput.write(controlMemoryInput.read());
