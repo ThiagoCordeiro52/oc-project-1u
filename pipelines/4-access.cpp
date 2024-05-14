@@ -4,11 +4,11 @@
 SC_MODULE(Access) {
     sc_in_clk clock;
     sc_in<sc_uint<32>> ulaInput, dataInput;
-    sc_in<sc_uint<5>> muxAddressInput;
+    sc_in<sc_uint<32>> muxAddressInput;
     sc_in<bool> writeInput, memoryLoadInput;
 
     sc_out<sc_uint<32>> ulaOutput, dataOutput;
-    sc_out<sc_uint<5>> muxAddressOutput;
+    sc_out<sc_uint<32>> muxAddressOutput;
     sc_out<bool> writeOutput, memoryLoadOutput;
 
     void next();

@@ -8,7 +8,7 @@ SC_MODULE(Decode) { // Ok
     sc_in<bool> ulaOperatorIn, controlMemoryInput, jumpInput, writeInput, loadMemoryInput, jumpCompareInput, jumpNegInput;
 
     sc_out<sc_uint<32>> instructionOutput, dataOutput1, dataOutput2;
-    sc_out<sc_uint<5>> memoryLoadAddressOutput, ulaAddressOutput, memoryLoadAddressRegOutput, memoryWriteAddressOutput;
+    sc_out<sc_uint<32>> memoryLoadAddressOutput, ulaAddressOutput, memoryLoadAddressRegOutput, memoryWriteAddressOutput;
     sc_out<bool> ulaOperatorOutput, controlMemoryWriteOutput, jumpOutput, regWriteOutput, memoryLoadOutput, jumpCompareOutput, jumpNegOutput;
 
     void next();
