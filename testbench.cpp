@@ -1,14 +1,14 @@
 #include <systemc.h>
-#include "common/pc/pc.h"
-#include "common/ula/ula.h"
-#include "common/registers/registers.h"
-#include "common/instruction-memory/instruction-memory.h"
-#include "common/data-memory/data-memory.h"
-#include "common/mux/mux.h"
-#include "pipelines/1-fetch.h"
-#include "pipelines/2-decode.h"
-#include "pipelines/3-execute.h"
-#include "pipelines/4-access.h"
+#include "common/pc/pc.cpp"
+#include "common/ula/ula.cpp"
+#include "common/registers/registers.cpp"
+#include "common/instruction-memory/instruction-memory.cpp"
+#include "common/data-memory/data-memory.cpp"
+#include "common/mux/mux.cpp"
+#include "pipelines/1-fetch.cpp"
+#include "pipelines/2-decode.cpp"
+#include "pipelines/3-execute.cpp"
+#include "pipelines/4-access.cpp"
 
 SC_MODULE(Testbench) {
 
