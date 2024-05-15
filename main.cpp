@@ -1,4 +1,7 @@
 #include <systemc.h>
+#include <fstream>
+#include <vector>
+#include <string>
 #include "common/pc/pc.h"
 #include "common/ula/ula.h"
 #include "common/registers/registers.h"
@@ -9,6 +12,29 @@
 #include "pipelines/2-decode.h"
 #include "pipelines/3-execute.h"
 #include "pipelines/4-access.h"
+
+int decode(std::string instruction) {
+    int decodedInstruction = 0;
+    int temporary = 0;
+
+    std::string temp;
+    std::stringstream line(instruction);
+    std::vector<std::string> words;
+
+    // Separando a instrução em palavras
+    while (getline(line, temp, ' ')) {
+        words.push_back(temp);
+    }
+
+    if (words.size() == 4) { 
+        if (words[0] == "add")
+            temporary = 0x20;
+        else if (words[0] == "sub")
+            temporary = 0x22;
+    }
+
+    return decodedInstruction;
+}
 
 int sc_main(int argc, char* argv[]) {
     ProgramCounter pc("PC");
@@ -104,6 +130,23 @@ int sc_main(int argc, char* argv[]) {
     access.mem_write_enable(mem_write_enable);
     access.mem_read_enable(mem_read_enable);
     access.mem_address(mem_address);
+
+    // Ler arquivo
+    std::ifstream file_input("examples/raiz_quadrada.asm");
+    std::vector<std::string> instructions;
+    std::string line;
+    while (std::getline(file_input, line)) {
+        instructions.push_backK(line);
+    }
+    file_input.close();
+
+    for (int i = 0; i < instructions.size(); ++i)
+    {
+        std::string instruction = instructions[i];
+        int instruction_int = decode(instruction);
+        imen.instruction_memory[i] = instruction_int;
+    }
+
 
     sc_start();  // Descobrir como simular isso aqui
 
