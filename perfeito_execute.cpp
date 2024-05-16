@@ -29,28 +29,25 @@ void executeMIPSInstruction(const std::string& instruction,
         int rs_index = std::stoi(rs.substr(1));
         int rt_index = std::stoi(rt.substr(1));
 
-        // Read register values from RegisterDatabase
         sc_uint<32> rs_value = regDB.registers[rs_index];
         sc_uint<32> rt_value = regDB.registers[rt_index];
 
-        // Set operand inputs for MUX
-        mux.operand1.write(rs_value);
-        mux.operand2.write(rt_value);
-        mux.operand3.write(0); // select operand1 for output
+        mux.operand1 = rs_value;
+        mux.operand2 = rt_value;
+        mux.operand3 = 0; 
 
-        // Trigger MUX and ALU operations
-        mux.compute();
-        alu.operand1.write(mux.result.read());
-        alu.operand2.write(rt_value);
-        alu.alu_control.write(0); // ALU addition operation
+        mux.mux_process();
 
-        // Perform ALU operation and store result in RegisterDatabase
-        alu.compute();
-        sc_uint<32> result = alu.result.read();
-        regDB.registers[std::stoi(rd.substr(1))] = result;
+        alu.operand1 = mux.result; 
+        alu.operand2 = rt_value;  
+        alu.alu_control = 0;       
+
+        alu.alu_process();
+
+        regDB.registers[std::stoi(rd.substr(1))] = alu.result.read();
+
+        pc.enable(true);
     }
-    // Increment Program Counter
-    pc.enable(true);
 }
 
 int sc_main(int argc, char* argv[]) {
