@@ -13,16 +13,12 @@ SC_MODULE(MUX) {
         sc_uint<32> s = operand3.read();
         sc_uint<32> output;
 
-        switch (operand3.read()) {
-            case 0:  
-                output = a;
-                break;
-            case 1: 
-                output = b;
-                break;
-            default:
-                output = 0;
-                break;
+        if (s == 0) {
+            output = a;
+        } else if (s == 1) {
+            output = b;
+        } else {
+            output = 0;
         }
 
         result.write(output);
